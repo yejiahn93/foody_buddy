@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <img src="{% static 'logos.png' %}" width="25">
+                <a class="navbar-brand text-warning" href="/dashboard">Foody Buddy</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+                    aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Home</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/dashboard/profile/{{current_user.id}}">My Profile<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="/dashboard/search">Search</a>
+                        </li>
+                    </ul>
+                    <span class="navbar-text">
+                        Hi, {{current_user.first_name}} {{current_user.last_name}} <a href="/logout" role="button"
+                        id="logout_button" class="btn btn-warning">Logout</a> 
+                    </span>
+                </div>
+            </div>
+        </nav>
+        <div class="contain">
+            <div class="main-body">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex flex-column align-items-center text-center">
+                                    <h2>My Profile</h2>
+                                    <div class="my_profile">
+                                    {% if current_user.profile_pic %}
+                                            <img src="{{ current_user.profile_pic.url }}" alt="connect" width="250" height="250">
+                                        {% endif %}   
+                                    </div>           
+                                    <form action="/dashboard/profile/{{current_user.id}}/upload" method="POST" enctype="multipart/form-data" >
+                                        {% csrf_token %}
+                                        <input type="file" class='form-control' name="picture">
+                                        <div class="mb-4"></div>
+                                        <button class="btn btn-warning">Upload</button>
+                                    </form>
+                                    <hr>
+                                    <div class="profile">    
+                                                        
+                                        <div class="text-secondary">
+                                            <hr>
+                                            <h6 class="">Name: {{current_user.first_name}} {{current_user.last_name}}</h6> 
+                                            
+                                            <h6 class="">Email: {{ current_user.email }}</h6>
+                                        </div>
+                                    </div>             
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="">
+                            <div class="card-body">
+                                <div class="d-flex flex-column align-items-center text-center">
+                                    <h3>Followers:</h3>
+                                    <hr>
+                                    <div class="row">                                             
+                                        <div class="text-secondary">
+                                            <ul>
+                                                {% for fol in another_user.followers.all %}
+                                                    <li>{{fol.first_name}} {{fol.last_name }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>             
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </body>
+
+</html>

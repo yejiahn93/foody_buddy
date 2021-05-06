@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+     <script>
+         function initAutocomplete() {
+  const map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 34.0522, lng: -118.2437 },
+    zoom: 8,
+    mapTypeId: "roadmap",
+  });
+  // Create the search box and link it to the UI element.
+  const input = document.getElementById("pac-input");
+  const searchBox = new google.maps.places.SearchBox(input);
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+  // Bias the SearchBox results towards current map's viewport.
+  map.addListener("bounds_changed", () => {
+    searchBox.setBounds(map.getBounds());
+  });
+  let markers = [];
+  // Listen for the event fired when the user selects a prediction and retrieve
+  // more details for that place.
+  searchBox.addListener("places_changed", () => {
+    const places = searchBox.getPlaces();
+
+    if (places.length == 0) {
+      return;
+    }
+    // Clear out the old markers.
+    markers.forEach((marker) => {
+      marker.setMap(null);
+    });
+    markers = [];
+    // For each place, get the icon, name and location.
+    const bounds = new google.maps.LatLngBounds();
+    places.forEach((place) => {
+      if (!place.geometry || !place.geometry.location) {
+        console.log("Returned place contains no geometry");
+        return;
+      }
+      const icon = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25),
+      };
+      const autocomplete = new google.maps.places.Autocomplete(input, options);
+      // Create a marker for each place.
+      markers.push(
+        new google.maps.Marker({
+          map,
+          icon,
+          title: place.name,
+          position: place.geometry.location,
+        })
+      );
+
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    });
+    map.fitBounds(bounds);
+  });
+}
+     </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <img src="{% static 'logos.png' %}" width="25">
+            <a class="navbar-brand text-warning" href="/dashboard">Foody Buddy</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Home</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/profile/{{current_user.id}}">My Profile</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/search">Search</a>
+                    </li>              
+                </ul>
+                <span class="navbar-text">
+                    Hi, {{current_user.first_name}} {{current_user.last_name}} <a href="/logout" role="button"
+                    id="logout_button" class="btn btn-warning">Logout</a> 
+                </span>
+            </div>
+        </div>
+    </nav>
+    <div class="one_restaurant"></div>
+        <div class="wrapper">
+            <div class="restaurant">
+                <div class="d-flex flex-column align-items-center text-center">
+                    <h1><b> {{ one_restaurant.restaurant_name }}</b></h1>
+                </div>
+                <div class="info">
+                    <p> <b>Address: </b> {{ one_restaurant.address }}</p> 
+                    <p> <b>Date: </b> {{ one_restaurant.date }}</p> 
+                    <p><b>Time:</b>  {{ one_restaurant.time }}</p> 
+                </div>
+                <div class="delete_button">
+                    {% if one_restaurant.creator.id == current_user.id %}
+                    <form action="/dashboard/{{one_restaurant.id}}/delete" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form> 
+                    {%endif%}
+                </div>
+            </div>
+            <div class="members">
+                <div class="d-flex flex-column align-items-center text-center">
+                    <h3>Members:</h3>
+                    <ul>
+                        {% for fav in one_restaurant.joined_by.all %}
+                        <li>{{fav.first_name}} {{fav.last_name }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% if current_user not in one_restaurant.joined_by.all %}
+                    <a href="/join/{{one_restaurant.id}}" role="button" class="btn btn-outline-warning">Join Group</a>
+                    {% else %}
+                    <a href="/leave/{{one_restaurant.id}}" role="button" class="btn btn-outline-warning">Leave Group</a>
+                    {% endif %} 
+                </div>
+            </div> 
+        </div>
+    </div>
+    <input
+    id="pac-input"
+    class="controls"
+    type="text"
+    placeholder="Search Box"
+  />
+    
+    <div id="map"></div>
+   <script
+   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEmgi-hO9xyZ5LUpDVCJXRiXcXfH6VEUA&callback=initAutocomplete&libraries=places&v=weekly"
+   async
+ ></script>
+    
+</body>
+
+</html>
+

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <img src="{% static 'logos.png' %}" width="25">
+            <a class="navbar-brand text-warning" href="/dashboard">Foody Buddy</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/dashboard">Home<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/profile/{{this_user.id}}">My Profile</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/search">Search</a>
+                    </li>
+                </ul>
+                <span class="navbar-text">
+                    Hi, {{this_user.first_name}} {{this_user.last_name}} <a href="/logout" role="button"
+                    id="logout_button" class="btn btn-warning">Logout</a> 
+                </span>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="search_button">
+            <a href="/dashboard/new" class="btn"><b>Add Restaurant</b></a>
+            </div>
+        <h4><b>My Restaurant </b></h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Resturant</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for restaurant in fav_restaurant %}
+                {% if this_user in restaurant.joined_by.all %}
+                <tr>
+                    {% if restaurant.creator.id == this_user.id %}
+                    <td><a href="/dashboard/profile/{{restaurant.creator.id}}"><b> {{this_user.first_name}} {{this_user.last_name}}</b></td>
+                    {% else %}
+                    <td><a href="/dashboard/user/{{restaurant.creator.id}}"><b> {{restaurant.creator.first_name}} {{restaurant.creator.last_name}}</b></td>
+                    {% endif%}
+                    <td><a href="/dashboard/{{restaurant.id}}">{{restaurant.restaurant_name}}</td>
+                    <td>{{restaurant.date|date:"SHORT_DATE_FORMAT"}}</td>
+                    <td>{{restaurant.time}}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <h4><b> My Foodie buddies' Restaurant</b></h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Resturant</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for restaurant in page.object_list %}
+                {% if this_user not in restaurant.joined_by.all %}
+                
+                <tr>
+                    <td><a href="/dashboard/user/{{restaurant.creator.id}}"><b>{{restaurant.creator.first_name}} {{restaurant.creator.last_name}}</b> </td>
+                    <td><a href="/dashboard/{{restaurant.id}}">{{restaurant.restaurant_name}}</td>
+                    <td>{{restaurant.date|date:"SHORT_DATE_FORMAT"}}</td>
+                    <td>{{restaurant.time}}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="page-link">
+            {% if page.has_previous %}
+                <a href="?page={{ page.previous_page_number }}">previous</a>
+            {% endif %}
+
+            {% if page.has_next %}
+                <a href="?page={{ page.next_page_number }}">next</a>
+            {% endif %}
+    </div>
+   
+    </div>
+    
+</body>
+
+</html>
