@@ -7,4 +7,5 @@
 
 ## Implementation
 <br>
-<img src="foody_app/static/Foody_Buddy.png" width="500" height="900">
+<h3>Wireframe</h3>
+<img src="foody_app/static/Foody_Buddy.png" width="600" height="1000">
