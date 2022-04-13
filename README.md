@@ -7,6 +7,4 @@
 
 ## Implementation
 <br>
-<h3>
-<img src="foody_app/static/Foody_Buddy.png">
-</h3>
+<img src="foody_app/static/Foody_Buddy.png" width="500" height="700">
