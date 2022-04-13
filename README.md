@@ -7,4 +7,4 @@
 
 ## Implementation
 <br>
-<img src="foody_app/static/Foody_Buddy.png" width="500" height="700">
+<img src="foody_app/static/Foody_Buddy.png" width="500" height="900">
