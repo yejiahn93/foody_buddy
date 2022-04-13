@@ -4,9 +4,10 @@
 <h2>
 I like to make the website that helps find other people who can and/or want to eat
 together.
-<br>
+<span>
 Through this website, it not only helps find other people to eat together, but can also
 create opportunities to make new friend(s).</h2>
+
 ## Register & Login
 <img src="https://github.com/yejiahn93/foody_buddy/blob/main/foody_app/static/foody_buddy_login_register.gif">
 
