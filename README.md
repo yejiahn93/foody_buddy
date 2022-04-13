@@ -1,4 +1,4 @@
-# Demo
+# Foody Buddy Website
 ## Register & Login
 <img src="https://github.com/yejiahn93/foody_buddy/blob/main/foody_app/static/foody_buddy_login_register.gif">
 
@@ -8,3 +8,17 @@
 ## Implementation
 <h3>Wireframe</h3>
 <img src="foody_app/static/Foody_Buddy.png" width="700" height="1500">
+
+## Features
+<ul>
+  <li> Login &amp; register</li>
+  <li> My restaurants table and my buddies’ restaurant table</li>
+  <li> Add restaurant</li>
+  <li> Menu bar (Main, Search, My profile, Log-out)</li>
+  <li> &quot;Join&quot; button to join my friend&#39;s restaurant selection on restaurant information
+  page</li>
+  <li> “Follow” button to follow other users</li>
+  <li> Filter (for all website users)</li>
+  <li> My profile page</li>
+  <li> Restaurant information page</li>
+</ul>
