@@ -1,12 +1,12 @@
 # Foody Buddy Website
 
 ## Description
-<h3>
+<p>
 I like to make the website that helps find other people who can and/or want to eat
 together.
 <span>
 Through this website, it not only helps find other people to eat together, but can also
-create opportunities to make new friend(s).</h3>
+create opportunities to make new friend(s).</p>
 
 ## Register & Login
 <img src="https://github.com/yejiahn93/foody_buddy/blob/main/foody_app/static/foody_buddy_login_register.gif">
